@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project Management Tool</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+            background:#f4f7fc;
+        }
+
+        /* Navbar */
+
+        .navbar{
+            width:100%;
+            background:#1e293b;
+            color:white;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:18px 60px;
+            position:fixed;
+            top:0;
+            z-index:1000;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo{
+            font-size:28px;
+            font-weight:bold;
+        }
+
+        .nav-links{
+            display:flex;
+            gap:15px;
+        }
+
+        .nav-btn{
+            text-decoration:none;
+            padding:10px 20px;
+            border-radius:8px;
+            color:white;
+            font-weight:500;
+            transition:0.3s;
+        }
+
+        .login-btn{
+            background:#2563eb;
+        }
+
+        .register-btn{
+            background:#22c55e;
+        }
+
+        .nav-btn:hover{
+            transform:translateY(-2px);
+        }
+
+        /* Hero Section */
+
+        .hero{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:100px 50px 50px;
+            background:white;
+            color:black;
+            text-align:center;
+        }
+
+        .hero-content{
+            max-width:900px;
+        }
+
+        .hero h1{
+            font-size:55px;
+            margin-bottom:20px;
+        }
+
+        .hero p{
+            font-size:20px;
+            line-height:1.8;
+            margin-bottom:30px;
+        }
+
+        .hero-btn{
+            text-decoration:none;
+            background:black;
+            color:white;
+            padding:15px 30px;
+            border-radius:10px;
+            font-weight:bold;
+            font-size:18px;
+            display:inline-block;
+        }
+
+        .hero-btn:hover{
+            background:#2f3235ba;
+        }
+
+        /* Features */
+
+        .features{
+            padding:80px 50px;
+            text-align:center;
+        }
+
+        .features h2{
+            margin-bottom:50px;
+            color:#1e293b;
+            font-size:36px;
+        }
+
+        .feature-container{
+            display:grid;
+            grid-template-columns:
+            repeat(auto-fit,minmax(250px,1fr));
+            gap:25px;
+        }
+
+        .feature-card{
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.08);
+            transition:0.3s;
+        }
+
+        .feature-card:hover{
+            transform:translateY(-5px);
+        }
+
+        .feature-card h3{
+            color:#2563eb;
+            margin-bottom:15px;
+        }
+
+        .feature-card p{
+            color:#555;
+            line-height:1.6;
+        }
+
+        /* Footer */
+
+        footer{
+            background:#1e293b;
+            color:white;
+            text-align:center;
+            padding:20px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            Project Management Tool
+        </div>
+
+        <div class="nav-links">
+
+            <a href="{% url 'login' %}"
+               class="nav-btn login-btn">
+                Login
+            </a>
+
+            <a href="{% url 'register' %}"
+               class="nav-btn register-btn">
+                Register
+            </a>
+
+        </div>
+
+    </nav>
+
+    <!-- Hero Section -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                Manage Projects Smarter
+            </h1>
+
+            <p>
+                A collaborative project management platform inspired by
+                Trello and Asana. Organize projects, assign tasks,
+                track progress, collaborate with team members, and
+                improve productivity through an intuitive Kanban-style
+                workflow.
+            </p>
+
+            <a href="{% url 'register' %}"
+               class="hero-btn">
+                Get Started
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- Features Section -->
+
+    <section class="features">
+
+        <h2>Key Features</h2>
+
+        <div class="feature-container">
+
+            <div class="feature-card">
+
+                <h3>📁 Project Creation</h3>
+
+                <p>
+                    Create and manage multiple projects with ease.
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <h3>✅ Task Management</h3>
+
+                <p>
+                    Assign tasks, set priorities, and track progress.
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <h3>💬 Team Collaboration</h3>
+
+                <p>
+                    Add comments and collaborate with team members.
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <h3>📊 Kanban Boards</h3>
+
+                <p>
+                    Organize work visually using task cards and boards.
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <h3>🔔 Notifications</h3>
+
+                <p>
+                    Stay updated with task assignments and project
+                    activities.
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <h3>🔒 Secure Authentication</h3>
+
+                <p>
+                    User accounts protected with Django authentication.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+
+    <footer>
+
+        <p>
+            © 2026 Project Management Tool | Team Collaboration Platform
+        </p>
+
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Submission Details</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+.navbar{
+    background:#1f2937;
+    color:white;
+    padding:15px 40px;
+    display:flex;
+    justify-content:space-between;
+}
+
+.navbar a{
+    text-decoration:none;
+    color:white;
+    background:#2563eb;
+    padding:10px 15px;
+    border-radius:8px;
+}
+
+.container{
+    width:85%;
+    margin:30px auto;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    margin-bottom:20px;
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
+}
+
+.file-btn{
+    display:inline-block;
+    margin-top:15px;
+    text-decoration:none;
+    background:#22c55e;
+    color:white;
+    padding:10px 15px;
+    border-radius:8px;
+}
+
+.comment{
+    background:#f8fafc;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+.approve{
+    background:#22c55e;
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    text-decoration:none;
+}
+
+.reject{
+    background:#ef4444;
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    text-decoration:none;
+}
+
+.action-buttons{
+    margin-top:20px;
+    display:flex;
+    gap:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <h2>Submission Details</h2>
+
+    <a href="{% url 'analytics_dashboard' %}">
+        Dashboard
+    </a>
+
+</div>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>{{ task.title }}</h2>
+
+        <br>
+
+        <p>
+
+            <strong>Submitted By:</strong>
+
+            {{ submission.user.username }}
+
+        </p>
+
+        <br>
+
+        <p>
+
+            <strong>Submission Date:</strong>
+
+            {{ submission.submitted_at }}
+
+        </p>
+
+        <br>
+
+        <p>
+
+            <strong>Status:</strong>
+
+            {{ task.status }}
+
+        </p>
+
+        <a
+            href="{{ submission.submitted_file.url }}"
+            target="_blank"
+            class="file-btn">
+
+            View File
+
+        </a>
+
+        <div class="action-buttons">
+
+            <a
+                href="{% url 'approve_submission' submission.id %}"
+                class="approve">
+
+                Approve
+
+            </a>
+
+            <a
+                href="{% url 'reject_submission' submission.id %}"
+                class="reject">
+
+                Reject
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Task Discussion</h2>
+
+        <br>
+
+        {% for comment in comments %}
+
+        <div class="comment">
+
+            <strong>
+
+                {{ comment.user.username }}
+
+            </strong>
+
+            <br><br>
+
+            {{ comment.comment_text }}
+
+            <br><br>
+
+            <small>
+
+                {{ comment.created_at }}
+
+            </small>
+
+        </div>
+
+        {% empty %}
+
+        <p>No comments available.</p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

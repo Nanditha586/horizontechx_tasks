@@ -1,0 +1,43 @@
+from django import forms
+from .models import Project, Task, Comment
+class ProjectForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Project
+
+        fields = [
+            'project_name',
+            'description'
+        ]
+
+class TaskForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Task
+
+        fields = [
+
+            'title',
+
+            'description',
+
+            'assigned_to',
+
+            'priority',
+
+            'status',
+
+            'due_date'
+        ]
+
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = ['comment_text']
+
+class AddMemberForm(forms.Form):
+
+    email = forms.EmailField()

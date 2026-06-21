@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Project Members</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+.navbar{
+    background:#1f2937;
+    color:white;
+    padding:15px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.navbar a{
+    color:white;
+    text-decoration:none;
+    background:#2563eb;
+    padding:10px 15px;
+    border-radius:8px;
+}
+
+.container{
+    width:90%;
+    margin:40px auto;
+}
+
+.heading{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.add-btn{
+    background:#22c55e;
+    color:white;
+    padding:10px 15px;
+    border-radius:8px;
+    text-decoration:none;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+th{
+    background:#2563eb;
+    color:white;
+    padding:15px;
+}
+
+td{
+    padding:15px;
+    text-align:center;
+    border-bottom:1px solid #eee;
+}
+
+.owner{
+    background:#fef3c7;
+    color:#92400e;
+    padding:6px 12px;
+    border-radius:20px;
+}
+
+.manager{
+    background:#dbeafe;
+    color:#1d4ed8;
+    padding:6px 12px;
+    border-radius:20px;
+}
+
+.member{
+    background:#dcfce7;
+    color:#166534;
+    padding:6px 12px;
+    border-radius:20px;
+}
+
+.role-form{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+}
+
+select{
+    padding:8px 12px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <h2>{{ project.project_name }}</h2>
+
+    <a href="{% url 'board_view' project.id %}">
+        Back To Board
+    </a>
+
+</div>
+
+<div class="container">
+
+    <div class="heading">
+
+        <h2>Project Members</h2>
+
+        <a href="{% url 'add_member' project.id %}"
+           class="add-btn">
+            + Add Member
+        </a>
+
+    </div>
+
+    <table>
+
+        <tr>
+
+            <th>Name</th>
+            <th>Email</th>
+            <th>Current Role</th>
+            <th>Change Role</th>
+
+        </tr>
+
+        {% for member in members %}
+
+        <tr>
+
+            <td>
+                {{ member.user.username }}
+            </td>
+
+            <td>
+                {{ member.user.email }}
+            </td>
+
+            <td>
+
+                {% if member.role == 'owner' %}
+
+                    <span class="owner">
+                        Owner
+                    </span>
+
+                {% elif member.role == 'manager' %}
+
+                    <span class="manager">
+                        Manager
+                    </span>
+
+                {% else %}
+
+                    <span class="member">
+                        Member
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                <form
+                    method="POST"
+                    action="{% url 'change_role' project.id member.id %}"
+                    class="role-form">
+
+                    {% csrf_token %}
+
+                    <select name="role">
+
+                        <option value="owner"
+                        {% if member.role == 'owner' %}
+                        selected
+                        {% endif %}>
+                            Owner
+                        </option>
+
+                        <option value="manager"
+                        {% if member.role == 'manager' %}
+                        selected
+                        {% endif %}>
+                            Manager
+                        </option>
+
+                        <option value="member"
+                        {% if member.role == 'member' %}
+                        selected
+                        {% endif %}>
+                            Member
+                        </option>
+
+                    </select>
+
+                    <button type="submit">
+                        Update
+                    </button>
+
+                </form>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Member</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+            min-height:100vh;
+        }
+
+        /* Navbar */
+
+        .navbar{
+            background:#1f2937;
+            color:white;
+            padding:15px 40px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .navbar a{
+            color:white;
+            text-decoration:none;
+            background:#2563eb;
+            padding:10px 15px;
+            border-radius:8px;
+        }
+
+        /* Container */
+
+        .container{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:80vh;
+        }
+
+        .card{
+            width:500px;
+            background:white;
+            padding:40px;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h2{
+            text-align:center;
+            margin-bottom:25px;
+            color:#1f2937;
+        }
+
+        label{
+            display:block;
+            margin-bottom:8px;
+            font-weight:600;
+        }
+
+        input{
+            width:100%;
+            padding:12px;
+            border:1px solid #d1d5db;
+            border-radius:8px;
+            margin-bottom:20px;
+            font-size:15px;
+        }
+
+        input:focus{
+            outline:none;
+            border-color:#2563eb;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            border:none;
+            border-radius:8px;
+            background:#22c55e;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#16a34a;
+        }
+
+        .info{
+            margin-top:20px;
+            text-align:center;
+            color:#6b7280;
+            font-size:14px;
+        }
+
+        .message{
+            padding:10px;
+            border-radius:8px;
+            margin-bottom:15px;
+            text-align:center;
+        }
+
+        .success{
+            background:#dcfce7;
+            color:#166534;
+        }
+
+        .error{
+            background:#fee2e2;
+            color:#991b1b;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <h2>{{ project.project_name }}</h2>
+
+        <a href="{% url 'project_members' project.id %}">
+            Back
+        </a>
+
+    </div>
+
+    <div class="container">
+
+        <div class="card">
+
+            <h2>Add Member</h2>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <label>
+                    User Email
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter registered user's email"
+                    required
+                >
+
+                <button type="submit">
+                    Add Member
+                </button>
+
+            </form>
+
+            <div class="info">
+                The user must already have an account in the system.
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

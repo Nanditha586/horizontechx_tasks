@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Activity Logs</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:#f4f6f9;
+}
+
+.navbar{
+background:#1f2937;
+color:white;
+padding:15px 40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.navbar a{
+background:#2563eb;
+padding:10px 15px;
+border-radius:8px;
+color:white;
+text-decoration:none;
+}
+
+.container{
+width:80%;
+margin:40px auto;
+}
+
+.log-card{
+background:white;
+padding:20px;
+margin-bottom:15px;
+border-radius:12px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.log-card p{
+font-size:16px;
+}
+
+.log-card small{
+color:gray;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<h2>{{ project.project_name }}</h2>
+
+<a href="{% url 'board_view' project.id %}">
+Back To Board
+</a>
+
+</div>
+
+<div class="container">
+
+<h2 style="margin-bottom:20px;">
+Activity Timeline
+</h2>
+
+{% for log in logs %}
+
+<div class="log-card">
+
+<p>
+
+<strong>
+
+{{ log.user.username }}
+
+</strong>
+
+-
+
+{{ log.action }}
+
+</p>
+
+<br>
+
+<small>
+
+{{ log.timestamp }}
+
+</small>
+
+</div>
+
+{% empty %}
+
+<p>No activities found.</p>
+
+{% endfor %}
+
+</div>
+
+</body>
+</html>

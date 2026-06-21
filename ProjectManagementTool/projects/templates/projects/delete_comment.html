@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Delete Comment</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+/* Navbar */
+
+.navbar{
+    background:#1f2937;
+    color:white;
+    padding:15px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.navbar a{
+    text-decoration:none;
+    color:white;
+    background:#2563eb;
+    padding:10px 15px;
+    border-radius:8px;
+}
+
+/* Center Card */
+
+.container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:85vh;
+}
+
+.card{
+    background:white;
+    width:550px;
+    padding:40px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+.card h2{
+    color:#ef4444;
+    margin-bottom:20px;
+}
+
+.card p{
+    color:#555;
+    margin-bottom:25px;
+    line-height:1.8;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+}
+
+.delete-btn{
+    flex:1;
+    background:#ef4444;
+    color:white;
+    border:none;
+    padding:12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.cancel-btn{
+    flex:1;
+    background:#22c55e;
+    color:white;
+    text-decoration:none;
+    padding:12px;
+    border-radius:8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <h2>Delete Comment</h2>
+
+    <a href="javascript:history.back()">
+        Back
+    </a>
+
+</div>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>Delete Confirmation</h2>
+
+        <p>
+
+            Are you sure you want to delete this comment?
+
+            <br><br>
+
+            <strong>
+
+                "{{ comment.comment_text }}"
+
+            </strong>
+
+        </p>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="actions">
+
+                <button
+                    type="submit"
+                    class="delete-btn">
+
+                    Yes, Delete
+
+                </button>
+
+                <a
+                    href="javascript:history.back()"
+                    class="cancel-btn">
+
+                    Cancel
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Submitted Tasks</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+.navbar{
+    background:#1f2937;
+    color:white;
+    padding:15px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.navbar a{
+    text-decoration:none;
+    color:white;
+    background:#2563eb;
+    padding:10px 15px;
+    border-radius:8px;
+}
+
+.container{
+    width:90%;
+    margin:30px auto;
+}
+
+.heading{
+    margin-bottom:25px;
+}
+
+.task-card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+    0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.task-card h3{
+
+    color:#1f2937;
+
+    margin-bottom:15px;
+}
+
+.info{
+
+    margin-bottom:10px;
+
+    color:#555;
+}
+
+.status{
+
+    display:inline-block;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    background:#22c55e;
+
+    color:white;
+
+    margin-top:10px;
+}
+
+.actions{
+
+    margin-top:20px;
+
+    display:flex;
+
+    gap:10px;
+}
+
+.btn{
+
+    text-decoration:none;
+
+    color:white;
+
+    padding:10px 15px;
+
+    border-radius:8px;
+}
+
+.download{
+    background:#2563eb;
+}
+
+.review{
+    background:#f59e0b;
+}
+
+.done{
+    background:#22c55e;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <h2>Submitted Tasks</h2>
+
+    <a href="{% url 'analytics_dashboard' %}">
+        Dashboard
+    </a>
+
+</div>
+
+<div class="container">
+
+    <div class="heading">
+
+        <h1>
+            Submitted Tasks
+        </h1>
+
+    </div>
+
+    {% for task in tasks %}
+
+    <div class="task-card">
+
+        <h3>
+
+            {{ task.title }}
+
+        </h3>
+
+        <div class="info">
+
+            <strong>Project:</strong>
+
+            {{ task.project.project_name }}
+
+        </div>
+
+        <div class="info">
+
+            <strong>Submitted By:</strong>
+
+            {{ task.assigned_to.username }}
+
+        </div>
+
+        <div class="info">
+
+            <strong>Submitted On:</strong>
+
+            {{ task.submitted_at }}
+
+        </div>
+
+        <div class="status">
+
+            Submitted
+
+        </div>
+
+        <div class="actions">
+
+            {% if task.submitted_file %}
+
+          <a href="{% url 'download_submission' task.id %}"
+   class="btn download">
+
+    Download File
+
+</a>
+
+            {% endif %}
+
+            <a href="{% url 'update_task_status' task.id 'review' %}"
+               class="btn review">
+
+                Move To Review
+
+            </a>
+
+            <a href="{% url 'update_task_status' task.id 'done' %}"
+               class="btn done">
+
+                Mark Done
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+    <div class="task-card">
+
+        No submitted tasks available.
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

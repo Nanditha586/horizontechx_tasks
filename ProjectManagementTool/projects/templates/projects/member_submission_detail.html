@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>My Submission</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:#f4f6f9;
+}
+
+.container{
+width:85%;
+margin:40px auto;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 3px 10px rgba(0,0,0,.1);
+margin-bottom:25px;
+}
+
+.card h2{
+margin-bottom:15px;
+color:#1f2937;
+}
+
+.info{
+margin-bottom:10px;
+font-size:16px;
+}
+
+.file-box{
+background:#f8fafc;
+padding:20px;
+border-radius:12px;
+margin-top:20px;
+}
+
+.btn{
+display:inline-block;
+padding:10px 15px;
+border-radius:8px;
+text-decoration:none;
+color:white;
+margin-top:10px;
+}
+
+.download-btn{
+background:#22c55e;
+}
+
+.upload-btn{
+background:#2563eb;
+border:none;
+cursor:pointer;
+}
+
+input[type=file]{
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:10px;
+margin-bottom:15px;
+}
+
+.comment{
+background:#f8fafc;
+padding:15px;
+border-radius:10px;
+margin-bottom:15px;
+}
+
+.comment-user{
+font-weight:bold;
+color:#2563eb;
+}
+
+.comment-text{
+margin-top:10px;
+}
+
+.comment-time{
+margin-top:10px;
+font-size:13px;
+color:gray;
+}
+
+.edit-btn{
+background:#2563eb;
+padding:6px 10px;
+color:white;
+border-radius:6px;
+text-decoration:none;
+}
+
+.delete-btn{
+background:#ef4444;
+padding:6px 10px;
+color:white;
+border-radius:6px;
+text-decoration:none;
+}
+
+.section-title{
+margin-bottom:20px;
+color:#1f2937;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h2>{{ task.title }}</h2>
+
+<div class="info">
+<b>Project:</b>
+{{ task.project.project_name }}
+</div>
+
+<div class="info">
+<b>Status:</b>
+{{ task.status }}
+</div>
+
+<div class="info">
+<b>Priority:</b>
+{{ task.priority }}
+</div>
+
+<div class="info">
+<b>Submitted:</b>
+{{ task.submitted_at }}
+</div>
+
+</div>
+
+{% if task.submitted_file %}
+
+<div class="card">
+
+<h3 class="section-title">
+Uploaded File
+</h3>
+
+<div class="file-box">
+
+<p>
+Current uploaded file:
+</p>
+
+<br>
+
+<a
+href="{{ task.submitted_file.url }}"
+target="_blank"
+class="btn download-btn">
+
+View Current File
+
+</a>
+
+</div>
+
+</div>
+
+{% endif %}
+
+<div class="card">
+
+<h3 class="section-title">
+
+Replace Uploaded File
+
+</h3>
+
+<form method="POST"
+      enctype="multipart/form-data">
+
+{% csrf_token %}
+
+<input
+type="file"
+name="submitted_file"
+required>
+
+<button
+type="submit"
+class="btn upload-btn">
+
+Upload New Version
+
+</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h3 class="section-title">
+
+Task Discussion
+
+</h3>
+
+{% for comment in comments %}
+
+<div class="comment">
+
+<div class="comment-user">
+
+{{ comment.user.username }}
+
+</div>
+
+<div class="comment-text">
+
+{{ comment.comment_text }}
+
+</div>
+
+<div class="comment-time">
+
+{{ comment.created_at }}
+
+</div>
+
+{% if comment.user == request.user %}
+
+<br>
+
+<a href="{% url 'edit_comment' comment.id %}"
+class="edit-btn">
+
+Edit
+
+</a>
+
+<a href="{% url 'delete_comment' comment.id %}"
+class="delete-btn">
+
+Delete
+
+</a>
+
+{% endif %}
+
+</div>
+
+{% empty %}
+
+<p>No comments available.</p>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+</body>
+</html>

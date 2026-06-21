@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Analytics Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+/* Navbar */
+
+        .navbar{
+            background:#1f2937;
+            color:white;
+            padding:15px 40px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar h2{
+            font-size:24px;
+        }
+
+        .nav-links{
+            display:flex;
+            gap:12px;
+        }
+
+        .nav-btn{
+            text-decoration:none;
+            color:white;
+            padding:10px 18px;
+            border-radius:8px;
+            font-weight:500;
+        }
+
+        .dashboard-btn{
+            background:#2563eb;
+        }
+
+        .logout-btn{
+            background:#ef4444;
+        }
+        .project-btn{
+            background-color: #22c55e;
+        }
+
+
+/* Cards */
+
+.cards{
+    width:90%;
+    margin:30px auto;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
+}
+
+.card h2{
+    color:#2563eb;
+}
+
+.card p{
+    margin-top:10px;
+    color:#555;
+}
+ 
+/* Charts */
+
+.chart-container{
+    width:90%;
+    margin:30px auto;
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:30px;
+}
+
+.chart-card{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
+}
+
+/* Activity Logs */
+
+.logs{
+    width:90%;
+    margin:30px auto;
+}
+.submit-btn{
+    background:#22c55e;
+    color:white;
+    padding:10px 15px;
+    border-radius:8px;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.view-btn{
+    background:#2563eb;
+    color:white;
+    padding:10px 15px;
+    border-radius:8px;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.submitted-badge{
+    color:#22c55e;
+    font-weight:bold;
+    font-size:15px;
+}
+
+.log-card{
+    background:white;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:10px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+@media(max-width:900px){
+
+.chart-container{
+    grid-template-columns:1fr;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<h2>Analytics Dashboard</h2>
+<div class="nav-links">
+         <a href="{% url 'create_project' %}"
+   class="nav-btn project-btn">
+    + Create Project
+</a>
+        <a href="{% url 'project_list' %}"
+           class="nav-btn dashboard-btn">
+            Projects
+        </a>
+        <a href="{% url 'notifications' %}"
+           class="nav-btn dashboard-btn">🔔 {{ unread_notifications }}
+            
+        </a>
+
+        <a href="{% url 'logout' %}"
+           class="nav-btn logout-btn">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+<div class="cards">
+
+    <div class="card">
+        <h2>{{ project_count }}</h2>
+        <p>Total Projects</p>
+    </div>
+
+    <div class="card">
+        <h2>{{ assigned_count }}</h2>
+        <p>Tasks Assigned</p>
+    </div>
+
+    <div class="card">
+        <h2>{{ completed_tasks }}</h2>
+        <p>Completed Tasks</p>
+    </div>
+
+    <div class="card">
+        <h2>{{ pending_tasks }}</h2>
+        <p>Pending Tasks</p>
+    </div>
+
+    <div class="card">
+        <h2>{{ unread_notifications }}</h2>
+        <p>Notifications</p>
+    </div>
+
+    <div class="card">
+        <h2>{{ completion_percentage }}%</h2>
+        <p>Completion Rate</p>
+    </div>
+
+</div>
+<div class="logs">
+
+<h2 style="margin-bottom:20px;">
+My Assigned Tasks
+</h2>
+
+{% for task in request.user.task_set.all %}
+
+<div class="log-card">
+
+    <strong>Project:</strong>
+
+    {{ task.project.project_name }}
+
+    <br><br>
+
+    <strong>
+
+        {{ task.title }}
+
+    </strong>
+
+    <br><br>
+
+    Status:
+    <b>{{ task.status }}</b>
+
+    <br>
+
+    Priority:
+    <b>{{ task.priority }}</b>
+
+    <br><br>
+
+    {% if not task.is_submitted %}
+
+        <a href="{% url 'submit_task' task.id %}"
+           class="submit-btn">
+
+            Submit Work
+
+        </a>
+
+    {% else %}
+
+        <span class="submitted-badge">
+
+            ✓ Submitted
+
+        </span>
+
+        <br><br>
+
+        <a href="{% url 'member_submission_details' task.id %}"
+           class="view-btn">
+
+            View Submission Details
+
+        </a>
+
+    {% endif %}
+
+</div>
+
+{% empty %}
+
+<div class="log-card">
+
+    No tasks assigned.
+
+</div>
+
+{% endfor %}
+
+</div>
+<!-- Charts -->
+
+<div class="chart-container">
+
+<div class="chart-card">
+
+<h3>Task Status</h3>
+
+<canvas id="statusChart"></canvas>
+
+</div>
+
+<div class="chart-card">
+
+<h3>Priority Distribution</h3>
+
+<canvas id="priorityChart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const statusCtx =
+document.getElementById(
+'statusChart'
+);
+
+new Chart(statusCtx,{
+
+type:'pie',
+
+data:{
+
+labels:[
+'Completed',
+'Pending'
+],
+
+datasets:[{
+
+data:[
+{{ completed_tasks }},
+{{ pending_tasks }}
+]
+
+}]
+
+}
+
+});
+
+const priorityCtx =
+document.getElementById(
+'priorityChart'
+);
+
+new Chart(priorityCtx,{
+
+type:'bar',
+
+data:{
+
+labels:[
+'High',
+'Medium',
+'Low'
+],
+
+datasets:[{
+
+label:'Tasks',
+
+data:[
+
+{{ high_priority }},
+
+{{ medium_priority }},
+
+{{ low_priority }}
+
+]
+
+}]
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
