@@ -1,0 +1,76 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+
+    <link rel="stylesheet"
+          href="{% static 'store/css/style.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <h1>Payment Page</h1>
+        
+    
+
+    <ul>
+        <li>
+                <a href="/">
+                    Home
+                </a>
+            </li>
+        <li><a href="/orders">Orders</a></li>
+
+        <li><a href="/cart/">Cart</a></li>
+        <li><a href="/wishlist/">Wishlist</a></li>
+        <li>
+                <a href="/profile/">
+                    Profile
+                </a>
+            </li>
+
+        {% if user.is_authenticated %}
+
+            <li><a href="/logout/">Logout</a></li>
+
+        {% else %}
+
+            <li><a href="/login/">Login</a></li>
+
+            <li><a href="/register/">Register</a></li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+    <div class="payment-container">
+
+        <h1>Order Summary</h1>
+
+        <h2>Total Amount: ₹ {{ total }}</h2>
+
+        <p>
+            This is a demo payment page.
+            No real payment gateway is integrated.
+        </p>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <button type="submit">
+                Confirm Order
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

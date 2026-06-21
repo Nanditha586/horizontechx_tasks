@@ -1,0 +1,278 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>{{ product.name }}</title>
+
+    <link rel="stylesheet"
+          href="{% static 'store/css/style.css' %}">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+        <h1>MyShop</h1>
+
+        <ul>
+
+            {% if user.is_authenticated %}
+                <li>
+                <a href="/">
+                    Home
+                </a>
+            </li>
+                <li>
+                    <a href="/orders/">
+                        Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/cart/">
+                        Cart
+                    </a>
+                </li>
+
+        
+
+                <li>
+                    <a href="/wishlist/">
+                        Wishlist
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/logout/">
+                        Logout
+                    </a>
+                </li>
+
+            {% else %}
+
+                <li>
+                    <a href="#"
+                       onclick="showLoginAlert()">
+                       Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#"
+                       onclick="showLoginAlert()">
+                       Cart
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/login/">
+                        Login
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/register/">
+                        Register
+                    </a>
+                </li>
+
+            {% endif %}
+
+        </ul>
+
+    </nav>
+
+    <!-- Product Detail Section -->
+
+    <div class="detail-container">
+
+        <div class="detail-image">
+
+            <img src="{{ product.image.url }}"
+                 alt="{{ product.name }}">
+
+        </div>
+
+        <div class="detail-info">
+
+            <h1>{{ product.name }}</h1>
+
+            <p>{{ product.description }}</p>
+
+            <h2>₹ {{ product.price }}</h2>
+
+            <!-- Add To Cart -->
+
+{% if user.is_authenticated %}
+
+<form method="POST"
+      action="{% url 'add_to_cart' product.id %}">
+
+    {% csrf_token %}
+
+    <!-- Quantity -->
+
+    <div class="quantity-box">
+
+        <label>
+
+            Quantity:
+
+        </label>
+
+        <input type="number"
+               name="quantity"
+               value="1"
+               min="1"
+               max="10"
+               required>
+
+    </div>
+
+    <br>
+
+    <button type="submit">
+
+        Add to Cart
+
+    </button>
+
+</form>
+
+{% else %}
+
+<button onclick="showCartLoginAlert()">
+
+    Add to Cart
+
+</button>
+
+{% endif %}
+        </div>
+
+    </div>
+
+    <hr>
+
+    {% for review in reviews %}
+
+<div class="review-box">
+
+    <h3>
+        {{ review.user.username }}
+    </h3>
+
+    <!-- Stars -->
+
+    <p>
+
+    {% for i in "12345" %}
+
+        {% if forloop.counter <= review.rating %}
+
+            <span style="color:gold;">
+                ★
+            </span>
+
+        {% else %}
+
+            <span style="color:#ccc;">
+                ★
+            </span>
+
+        {% endif %}
+
+    {% endfor %}
+
+    </p>
+
+    <!-- Comment -->
+
+    <p>
+        {{ review.comment }}
+    </p>
+
+    <!-- Review Image -->
+
+    {% if review.image %}
+
+        <img src="{{ review.image.url }}"
+             width="250">
+
+    {% endif %}
+
+    <br><br>
+
+    <!-- Review Video -->
+
+    {% if review.video %}
+
+        <video width="300"
+               controls>
+
+            <source src="{{ review.video.url }}">
+
+        </video>
+
+    {% endif %}
+
+</div>
+
+<hr>
+
+{% endfor %}
+    <!-- JavaScript -->
+
+    <script>
+
+        function showLoginAlert(){
+
+            let login = confirm(
+                "Please login to view Orders and Cart.\n\nGo to Login page?"
+            );
+
+            if(login){
+
+                window.location.href = "/login/";
+
+            }
+        }
+
+        function showCartLoginAlert(){
+
+            let login = confirm(
+                "Please login to add products to cart.\n\nGo to Login page?"
+            );
+
+            if(login){
+
+                window.location.href = "/login/";
+
+            }
+        }
+
+        function showReviewLoginAlert(){
+
+            let login = confirm(
+                "Please login to submit reviews.\n\nGo to Login page?"
+            );
+
+            if(login){
+
+                window.location.href = "/login/";
+
+            }
+        }
+
+    </script>
+
+</body>
+</html>

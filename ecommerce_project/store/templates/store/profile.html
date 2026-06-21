@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+
+    <link rel="stylesheet"
+          href="{% static 'store/css/style.css' %}">
+</head>
+<body>
+<nav class="navbar">
+        <h1>Profile</h1>
+        
+    
+
+    <ul>
+        <li>
+                <a href="/">
+                    Home
+                </a>
+            </li>
+        <li><a href="/orders">Orders</a></li>
+
+        <li><a href="/cart/">Cart</a></li>
+        <li>
+                <a href="/wishlist/">
+                    Wishlist
+                </a>
+            </li>
+
+        {% if user.is_authenticated %}
+
+            <li><a href="/logout/">Logout</a></li>
+
+        {% else %}
+
+            <li><a href="/login/">Login</a></li>
+
+            <li><a href="/register/">Register</a></li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+<h2>{{ request.user.username }}</h2>
+
+<h3>{{ request.user.email }}</h3>
+
+<h2>My Orders</h2>
+
+{% for order in orders %}
+
+<p>{{ order.product.name }}</p>
+
+{% endfor %}
+</body>

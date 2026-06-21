@@ -1,0 +1,15 @@
+# Virtual Environments
+venv/
+env/
+ProjectManagementTool/venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Django database
+db.sqlite3
+*.sqlite3
+
+# VS Code
+.vscode/

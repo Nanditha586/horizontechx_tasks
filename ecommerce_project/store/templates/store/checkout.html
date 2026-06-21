@@ -1,0 +1,56 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout</title>
+
+    <link rel="stylesheet"
+          href="{% static 'store/css/style.css' %}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <h1>
+            Checkout
+        </h1>
+
+    </nav>
+
+    <div class="checkout-container">
+
+        <h2>
+            Total Amount: ₹ {{ total }}
+        </h2>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <textarea name="address"
+                      placeholder="Enter Address"
+                      required></textarea>
+
+            <input type="text"
+                   name="phone"
+                   placeholder="Enter Phone Number"
+                   required>
+
+            <button type="submit">
+
+                Place Order
+
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

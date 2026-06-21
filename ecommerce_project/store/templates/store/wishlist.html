@@ -1,0 +1,113 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wishlist</title>
+
+    <link rel="stylesheet"
+          href="{% static 'store/css/style.css' %}">
+    <style>
+        .wishlist-remove{
+
+    margin-top:15px;
+
+    text-align:center;
+}
+
+.wishlist-remove a{
+
+    text-decoration:none;
+
+    font-size:35px;
+
+    color:red;
+
+    transition:0.3s;
+}
+
+.wishlist-remove a:hover{
+
+    transform:scale(1.2);
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+        <h1>Wishlist</h1>
+        
+
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/orders">Orders</a></li>
+        <li><a href="/cart/">Cart</a></li>
+        <li><a href="/profile/"> Profile</a></li>
+
+        {% if user.is_authenticated %}
+
+            <li><a href="/logout/">Logout</a></li>
+
+        {% else %}
+
+            <li><a href="/login/">Login</a></li>
+
+            <li><a href="/register/">Register</a></li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+<div class="products">
+
+{% for item in wishlist_items %}
+
+<div class="product-card">
+
+    <img src="{{ item.product.image.url }}" alt="">
+
+    <h2>{{ item.product.name }}</h2>
+
+    <h3>₹ {{ item.product.price }}</h3>
+
+    <a href="{% url 'product_detail' item.product.id %}">
+        <button>View Product</button>
+    </a>
+
+    <br><br>
+
+    <div class="wishlist-remove">
+
+    <a href="#"
+       onclick="removeWishlist('{% url 'remove_from_wishlist' item.id %}')">
+
+        ❤️
+
+    </a>
+
+</div>
+
+</div>
+{% endfor %}
+
+</div>
+<script>
+
+function removeWishlist(url){
+
+    let confirmRemove = confirm(
+        "Remove this product from wishlist?"
+    );
+
+    if(confirmRemove){
+
+        window.location.href = url;
+    }
+}
+
+</script>
+
+</body>
+</html>

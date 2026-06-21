@@ -1,0 +1,401 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyShop</title>
+
+    <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+    <style>
+        /* Search */
+
+.search-container{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin:0px 0;
+}
+
+.search-container form{
+
+    display:flex;
+
+    gap:10px;
+}
+
+.search-container input{
+
+    padding:12px;
+
+    width:300px;
+}
+.search-container select{
+
+    padding:12px;
+
+    width:200px;
+
+    border:1px solid #ccc;
+
+    border-radius:5px;
+}
+
+.search-container button{
+
+    padding:12px 20px;
+
+    border:none;
+
+    background:black;
+
+    color:white;
+
+    cursor:pointer;
+}
+/* Hero Section */
+
+.hero {
+    height: 60vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #f4f4f4;
+}
+
+.hero h2 {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.product-card{
+
+    position:relative;
+}
+
+.wishlist-icon{
+
+    position:absolute;
+
+    top:15px;
+
+    right:15px;
+
+    z-index:10;
+}
+
+.wishlist-icon a{
+
+    text-decoration:none;
+
+    font-size:30px;
+
+    color:red;
+
+    transition:0.3s;
+}
+
+.wishlist-icon a:hover{
+
+    transform:scale(1.2);
+}
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+    <h1>MyShop</h1>
+
+    <ul>
+
+        {% if user.is_authenticated %}
+
+    <li><a href="/orders/">Orders</a></li>
+
+    <li><a href="/cart/">Cart</a></li>
+    <li><a href="/wishlist/">Wishlist</a></li>
+
+    <li><a href="/profile/">Profile</a></li>
+
+{% else %}
+
+    <li>
+        <a href="#"
+           onclick="showLoginAlert()">
+           Orders
+        </a>
+    </li>
+
+    <li>
+        <a href="#"
+           onclick="showLoginAlert()">
+           Cart
+        </a>
+    </li>
+
+{% endif %}
+
+        {% if user.is_authenticated %}
+
+            <li><a href="/logout/">Logout</a></li>
+
+        {% else %}
+
+            <li><a href="/login/">Login</a></li>
+
+            <li><a href="/register/">Register</a></li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+    <!-- Hero Section -->
+
+    <section class="hero">
+        <h2>Welcome to MyShop</h2>
+        <p>Best Online Shopping Website</p> 
+    </section>
+
+    <!-- Products Section -->
+
+<!-- Search + Category Filter -->
+
+<div class="search-container">
+
+    <form method="GET">
+
+        <!-- Search Input -->
+
+        <input type="text"
+               name="search"
+               placeholder="Search products">
+
+        <!-- Category Dropdown -->
+
+        <select name="category">
+
+            <option value="">
+                All Categories
+            </option>
+
+            {% for category in categories %}
+
+            <option value="{{ category.id }}"
+
+{% if request.GET.category == category.id|stringformat:"s" %}
+
+selected
+
+{% endif %}>
+
+
+                {{ category.name }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <!-- Search Button -->
+
+        <button type="submit">
+
+            Search
+
+        </button>
+
+    </form>
+
+</div>
+
+
+<!-- Products -->
+
+<section class="products">
+
+    {% for product in page_obj %}
+
+    <div class="product-card">
+
+    <!-- Wishlist Icon -->
+
+    <div class="wishlist-icon">
+
+{% if user.is_authenticated %}
+
+    <a href="{% url 'add_to_wishlist' product.id %}">
+
+        {% if product.id in wishlist_products %}
+
+            ❤️
+
+        {% else %}
+
+            🤍
+
+        {% endif %}
+
+    </a>
+
+{% else %}
+
+    <a href="#"
+       onclick="showWishlistLoginAlert()">
+
+        🤍
+
+    </a>
+
+{% endif %}
+
+</div>
+
+    <a href="{% url 'product_detail' product.id %}">
+
+        <img src="{{ product.image.url }}" alt="">
+
+    </a>
+
+    <h2>{{ product.name }}</h2>
+
+    <p>{{ product.description }}</p>
+
+    <h3>₹ {{ product.price }}</h3>
+
+    {% if product.stock == 0 %}
+
+        <p style="
+            color:red;
+            font-weight:bold;
+            margin-bottom:15px;
+            font-size:18px;
+        ">
+            Out Of Stock
+        </p>
+
+    {% elif product.stock < 10 %}
+
+        <p style="
+            color:#ff6600;
+            font-weight:bold;
+            margin-bottom:15px;
+            font-size:18px;
+        ">
+            Only {{ product.stock }} Left
+        </p>
+
+    {% else %}
+
+        <p style="
+            color:green;
+            font-weight:bold;
+            margin-bottom:15px;
+            font-size:18px;
+        ">
+            In Stock
+        </p>
+
+    {% endif %}
+
+    {% if product.stock == 0 %}
+
+        <button disabled
+                style="
+                    background:gray;
+                    cursor:not-allowed;
+                ">
+            Out Of Stock
+        </button>
+
+    {% else %}
+
+        <a href="{% url 'product_detail' product.id %}">
+            <button>
+                View Product
+            </button>
+        </a>
+
+    {% endif %}
+
+</div>
+
+    {% endfor %}
+
+</section>
+
+
+<!-- Pagination -->
+
+<div class="pagination">
+
+    {% if page_obj.has_previous %}
+
+        <a href="?page=1">First</a>
+
+        <a href="?page={{ page_obj.previous_page_number }}">
+            Previous
+        </a>
+
+    {% endif %}
+
+    <span>
+        Page {{ page_obj.number }}
+        of
+        {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+
+        <a href="?page={{ page_obj.next_page_number }}">
+            Next
+        </a>
+
+        <a href="?page={{ page_obj.paginator.num_pages }}">
+            Last
+        </a>
+
+    {% endif %}
+
+</div>
+    <script>
+
+function showLoginAlert(){
+
+    alert("Please login to view Orders and Cart");
+
+}
+
+function showWishlistLoginAlert(){
+
+    let login = confirm(
+        "Please login to add products to wishlist.\n\nGo to Login page?"
+    );
+
+    if(login){
+
+        window.location.href = "/login/";
+    }
+}
+
+</script>
+
+<script src="{% static 'store/js/script.js' %}"></script>
+
+</body>
+</html>
